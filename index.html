@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Birthday Diary Gift</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Indie+Flower&family=Dancing+Script:wght@700&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #ff758c, #ff7eb3);
+            overflow: hidden;
+        }
+
+        /* floating bg */
+        .float span {
+            position: absolute;
+            bottom: -40px;
+            font-size: 26px;
+            animation: floatUp 10s linear infinite;
+        }
+
+        @keyframes floatUp {
+            to {
+                transform: translateY(-120vh);
+            }
+        }
+
+        /* front card */
+        .card {
+            background: white;
+            width: 340px;
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, .3);
+        }
+
+        .card h1 {
+            color: #ff4d6d;
+        }
+
+        .card button {
+            padding: 10px 22px;
+            border: none;
+            border-radius: 25px;
+            background: #ff4d6d;
+            color: white;
+            cursor: pointer;
+        }
+
+        /* diary overlay */
+        .diary-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, .7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+        }
+
+        /* close */
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 25px;
+            background: #ff4d6d;
+            color: white;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        /* diary */
+        .book-container {
+            width: 350px;
+            height: 480px;
+            perspective: 1500px;
+        }
+
+        .book {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+        }
+
+        .paper {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            transform-origin: left;
+            transition: transform .6s;
+        }
+
+        .paper.flipped {
+            transform: rotateY(-180deg);
+        }
+
+        .front,
+        .back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 5px 15px 15px 5px;
+            background: #fdfbf7;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, .25);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            box-sizing: border-box;
+            font-family: 'Indie Flower', cursive;
+        }
+
+        .back {
+            transform: rotateY(180deg);
+        }
+
+        #p1 .front {
+            background: #8e44ad;
+            color: white;
+            font-family: 'Dancing Script', cursive;
+            font-size: 2.5rem;
+        }
+
+        .photo-frame {
+            width: 80%;
+            height: 200px;
+            border: 8px solid white;
+            background: url('photo.jpeg') center/cover no-repeat;
+            margin-top: 15px;
+        }
+
+        .lined {
+            background-image: linear-gradient(#ddd 1px, transparent 1px);
+            background-size: 100% 1.8rem;
+            align-items: flex-start;
+            padding-top: 60px;
+        }
+
+        .controls {
+            margin-top: 15px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .controls button {
+            padding: 8px 18px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="float">
+        <span style="left:10%">🎈</span>
+        <span style="left:30%">🎂</span>
+        <span style="left:50%">🎉</span>
+        <span style="left:70%">💖</span>
+    </div>
+
+    <div class="card">
+        <h1>Happy Birthday</h1>
+        <h2>Kalpna Sharma</h2>
+        <p>🎂 10 February 🎂</p>
+        <button onclick="openDiary()">Click for Surprise 📖</button>
+    </div>
+
+    <div class="diary-overlay" id="diary">
+        <button class="close-btn" onclick="closeDiary()">✖</button>
+
+        <div>
+            <div class="book-container">
+                <div class="book">
+
+                    <!-- PAGE 1 -->
+                    <div class="paper" id="p1">
+                        <div class="front">
+                            Happy Birthday
+                            <div class="photo-frame"></div>
+                        </div>
+                        <div class="back">🎂 10 February 🎂</div>
+                    </div>
+
+                    <!-- PAGE 2 -->
+                    <div class="paper" id="p2">
+                        <div class="front lined">
+                            Dear Kalpna,<br><br>
+                            Today is not just a birthday,<br>
+                            it is a celebration of you 💖
+                        </div>
+                        <div class="back">✨ Keep shining ✨</div>
+                    </div>
+
+                    <!-- PAGE 3 -->
+                    <div class="paper" id="p3">
+                        <div class="front lined">
+                            May your life always be filled<br>
+                            with happiness, peace and love 🌸
+                        </div>
+                        <div class="back">😊 Smile always 😊</div>
+                    </div>
+
+                    <!-- PAGE 4 -->
+                    <div class="paper" id="p4">
+                        <div class="front lined">
+                            Every year you grow stronger,<br>
+                            wiser and more beautiful ✨
+                        </div>
+                        <div class="back">🌈 Believe in yourself 🌈</div>
+                    </div>
+
+                    <!-- PAGE 5 -->
+                    <div class="paper" id="p5">
+                        <div class="front lined">
+                            Never stop dreaming big,<br>
+                            because you deserve the best 💫
+                        </div>
+                        <div class="back">⭐ Dream big ⭐</div>
+                    </div>
+
+                    <!-- PAGE 6 -->
+                    <div class="paper" id="p6">
+                        <div class="front lined">
+                            May success follow you<br>
+                            wherever you go 🌟
+                        </div>
+                        <div class="back">🚀 Fly high 🚀</div>
+                    </div>
+
+                    <!-- PAGE 7 -->
+                    <div class="paper" id="p7">
+                        <div class="front lined">
+                            Always keep that kind heart<br>
+                            and beautiful smile 💕
+                        </div>
+                        <div class="back">💖 Stay kind 💖</div>
+                    </div>
+
+                    <!-- PAGE 8 -->
+                    <div class="paper" id="p8">
+                        <div class="front lined">
+                            This diary carries wishes<br>
+                            straight from the heart 💌
+                        </div>
+                        <div class="back">🎁 Special for you 🎁</div>
+                    </div>
+
+                    <!-- PAGE 9 -->
+                    <div class="paper" id="p9">
+                        <div class="front lined">
+                            May every coming year<br>
+                            bring joy and success 🎊
+                        </div>
+                        <div class="back">🥂 Cheers to you 🥂</div>
+                    </div>
+
+                    <!-- PAGE 10 -->
+                    <div class="paper" id="p10">
+                        <div class="front">
+                            🎉 Enjoy Your Special Day 🎉
+                        </div>
+                        <div class="back">
+                            Made with ❤️
+                        </div>
+                    </div>
+
+                    <!-- PAGE 11 (ABOUT YOU) -->
+                    <div class="paper" id="p11">
+                        <div class="front lined">
+                            This diary was created by<br><br>
+                            <b>Satyam</b><br><br>
+                            A small effort to bring a smile<br>
+                            on your face 😊<br><br>
+                            Some gifts are not bought,<br>
+                            they are made with feelings ❤️
+                        </div>
+                        <div class="back">
+                            — From Satyam —
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="controls">
+                <button onclick="prevPage()">Previous</button>
+                <button onclick="nextPage()">Next</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let diary = document.getElementById("diary");
+        let papers = [p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11];
+        let current = 0;
+        papers.forEach((p, i) => p.style.zIndex = papers.length - i);
+
+        function openDiary() {
+            diary.style.display = "flex";
+        }
+        function closeDiary() {
+            diary.style.display = "none";
+            papers.forEach(p => p.classList.remove("flipped"));
+            current = 0;
+        }
+        function nextPage() {
+            if (current < papers.length) {
+                papers[current].classList.add("flipped");
+                if (current === papers.length - 1) confetti();
+                current++;
+            }
+        }
+        function prevPage() {
+            if (current > 0) {
+                current--;
+                papers[current].classList.remove("flipped");
+            }
+        }
+    </script>
+
+</body>
+
+</html>
